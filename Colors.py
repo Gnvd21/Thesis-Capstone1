@@ -33,7 +33,7 @@ def get_image(image_path):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return image
 
-img_2 = get_image('inputimage.jpg')
+img_2 = get_image('picture.jpeg')
 plt.imshow(img_2)
 plt.axis('off')
 
