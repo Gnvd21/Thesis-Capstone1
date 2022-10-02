@@ -20,8 +20,7 @@ plt.rcParams['legend.fontsize'] = 12
 plt.rcParams['figure.titlesize'] = 12 
 plt.rcParams['image.cmap'] = 'jet' 
 plt.rcParams['image.interpolation'] = 'none' 
-plt.rcParams['figure.figsize'] = (10, 10
-                                 ) 
+plt.rcParams['figure.figsize'] = (10, 10)                                 
 plt.rcParams['axes.grid']=False
 plt.rcParams['lines.linewidth'] = 2 
 plt.rcParams['lines.markersize'] = 8
@@ -33,36 +32,33 @@ def get_image(image_path):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return image
 
-img_2 = get_image('picture.jpeg')
-plt.imshow(img_2)
-plt.axis('off')
-
 def RGB2HEX(color):
     return "#{:02x}{:02x}{:02x}".format(int(color[0]), int(color[1]), int(color[2]))
 
+img_name = input("Name of picture as well as its extension.\nPicture must be in the same folder as \"Colors.py\" file.\n")
+
+image = get_image(img_name)
 number_of_colors = 10
-
-image = img_2
-
 modified_image = image.reshape(image.shape[0]*image.shape[1], 3)
-
 clf = KMeans(n_clusters = number_of_colors)
 labels = clf.fit_predict(modified_image)
 
 counts = Counter(labels)
 
 center_colors = clf.cluster_centers_
-# We get ordered colors by iterating through the keys
 ordered_colors = [center_colors[i] for i in counts.keys()]
 hex_colors = [RGB2HEX(ordered_colors[i]) for i in counts.keys()]
 rgb_colors = [ordered_colors[i] for i in counts.keys()]
 
-plt.title('Colors Detection ($n=10$)', fontsize=20)
+plt.title('Colors Detection $n=10$', fontsize=20)
 plt.pie(counts.values(), labels = hex_colors, colors = hex_colors)
+plt.show()
 
 for i in range(len(rgb_colors)):
     rgb_colors[i] = rgb_colors[i].astype(int)
 
+#The following block of code is unneccessary for program.
+"""
 def inthreshold(array):
     count = 0
     for i in range(len(array)):
@@ -72,7 +68,7 @@ def inthreshold(array):
 
 def show_color(col_index):
     color = col_index
-    sub_image = (img_2-rgb_colors[color])
+    sub_image = (image-rgb_colors[color])
     ZEROS_VALUES = []
     COUNT = []
     for i in range(len(sub_image)):
@@ -86,24 +82,26 @@ def show_color(col_index):
     color_arr=(np.zeros((16,16,3))+rgb_colors[color]).astype(int)
     normalized = sub_image - sub_image.min()
     normalized = ((sub_image/sub_image.max())*255).astype(int)
-    ZEROS_IMAGE = img_2.copy()
+    ZEROS_IMAGE = image.copy()
+
     for i in range(len(ZEROS_VALUES)):
         ZEROS_IMAGE[ZEROS_VALUES[i][0],ZEROS_VALUES[i][1],:] = [250,250,250]
     plt.subplot(1,3,1)
     plt.imshow(ZEROS_IMAGE.astype(int))
     plt.subplot(1,3,2)
-    plt.imshow(img_2)
+    plt.imshow(image)
     plt.subplot(1,3,3)
     #pwargs = {'interpolation':'nearest'}
     plt.imshow(color_arr)
 
 show_color(4)
+"""
 
 def square_maker():
-    inp_img = img_2
-    h = int(img_2.shape[0])
+    inp_img = image
+    h = int(image.shape[0])
     step_h = int(h/10) 
-    w = int(img_2.shape[1])
+    w = int(image.shape[1])
     step_w = int(w/10) 
     X = np.arange(0,h+step_h,step_h)
     Y =np.arange(0,w+step_w,step_w)
@@ -127,10 +125,13 @@ def color_computing(array):
 def best_color_plot(selected_slice):
     plt.subplot(1,2,1)
     plt.title('Retrieved Color')
-    plt.imshow((np.zeros((16,16,3))+ rgb_colors[color_computing(img_2)[selected_slice].argmin()]).astype(int))
+    plt.imshow((np.zeros((16,16,3))+ rgb_colors[color_computing(image)[selected_slice].argmin()]).astype(int))
     plt.subplot(1,2,2)
     plt.title('Selected Square: '+ str(selected_slice))
     plt.imshow(square_maker()[selected_slice])
+    plt.show()
+
+
 
 
 best_color_plot(5)
@@ -139,8 +140,10 @@ best_color_plot(25)
 
 best_color_plot(90)
 
+#The following block of code is unneccessary for program.
+"""
 def build_summary():
-    results = color_computing(img_2)
+    results = color_computing(image)
     cols = ['Square Number'] + hex_colors
     sorted_results = pd.DataFrame(columns= cols)
     k=0
@@ -149,11 +152,13 @@ def build_summary():
         d = {'Square Number':int(k)}
         for c in range(len(hex_colors)):
             d[hex_colors[c]] = r[c]*100/r.sum()
-        sorted_results = sorted_results.append(d,ignore_index=True)
+        #sorted_results = sorted_results.pd.concat(d, pd.Dataframe.from_records())  #(d,ignore_index=True)
+        sorted_results = pd.concat([sorted_results, pd.DataFrame.from_records([{ 'a': 1, 'b': 2 }])])
         k=k+1
     sorted_results['Square Number'] = sorted_results['Square Number'].astype(int)
     return sorted_results
 
-summary_img_2 = build_summary()
+summary_image = build_summary()
 
-summary_img_2.head()
+summary_image.head()
+"""
