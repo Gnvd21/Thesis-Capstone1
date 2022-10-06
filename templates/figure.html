@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Figure Page {% endblock %}
+
+{% block content %}
+<p>Pie Here</p>
+<a href="/Pie">Pie</a>
+<image width = "100">{{ pie|safe }}</image>
+<div class="slidecontainer">
+    <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+  </div>
+{% endblock %}
