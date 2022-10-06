@@ -1,11 +1,13 @@
+from cProfile import label
+from re import L
 import pandas as pd
 import numpy as np 
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt, mpld3
 import sklearn
 from sklearn.cluster import KMeans
 from collections import Counter
 from skimage.color import rgb2lab, deltaE_cie76
-import cv2
+import cv2 
 plt.style.use('ggplot')
 plt.rcParams['font.family'] = 'sans-serif' 
 plt.rcParams['font.serif'] = 'Ubuntu' 
@@ -35,8 +37,8 @@ def get_image(image_path):
 def RGB2HEX(color):
     return "#{:02x}{:02x}{:02x}".format(int(color[0]), int(color[1]), int(color[2]))
 
-img_name = input("Name of picture as well as its extension.\nPicture must be in the same folder as \"Colors.py\" file.\n")
-
+img_name = "picture.jpeg" #input("Name of picture as well as its extension.\nPicture must be in the same folder as \"Colors.py\" file.\n")
+#picture.jpeg
 image = get_image(img_name)
 number_of_colors = 10
 modified_image = image.reshape(image.shape[0]*image.shape[1], 3)
@@ -50,14 +52,18 @@ ordered_colors = [center_colors[i] for i in counts.keys()]
 hex_colors = [RGB2HEX(ordered_colors[i]) for i in counts.keys()]
 rgb_colors = [ordered_colors[i] for i in counts.keys()]
 
-plt.title('Colors Detection $n=10$', fontsize=20)
-plt.pie(counts.values(), labels = hex_colors, colors = hex_colors)
-plt.show()
+def Pie_fig():
+    fig1, ax1 = plt.subplots(1,1, figsize=(4,4))
+    fig1.canvas.draw_idle()
+    plt.title('Colors Detection Number = 10', fontsize=20)
+    ax1.pie(counts.values(), labels = hex_colors, colors = hex_colors,frame=False, radius=.8,labeldistance=1.08)
+    PieChart = mpld3.fig_to_html(fig1, template_type= "simple")
+    return PieChart
 
 for i in range(len(rgb_colors)):
     rgb_colors[i] = rgb_colors[i].astype(int)
 
-#The following block of code is unneccessary for program.
+#The following block of code is not yet neccessary for program.
 """
 def inthreshold(array):
     count = 0
@@ -129,7 +135,7 @@ def best_color_plot(selected_slice):
     plt.subplot(1,2,2)
     plt.title('Selected Square: '+ str(selected_slice))
     plt.imshow(square_maker()[selected_slice])
-    plt.show()
+    #plt.show()
 
 
 
@@ -140,7 +146,7 @@ best_color_plot(25)
 
 best_color_plot(90)
 
-#The following block of code is unneccessary for program.
+#The following block of code is not yet neccessary for program.
 """
 def build_summary():
     results = color_computing(image)
