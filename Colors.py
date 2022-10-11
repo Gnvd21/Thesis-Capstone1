@@ -40,8 +40,11 @@ def RGB2HEX(color):
 img_name = "picture.jpeg" #input("Name of picture as well as its extension.\nPicture must be in the same folder as \"Colors.py\" file.\n")
 #picture.jpeg
 image = get_image(img_name)
-number_of_colors = 10
 modified_image = image.reshape(image.shape[0]*image.shape[1], 3)
+number_of_colors = 10
+
+if number_of_colors < 5:
+    number_of_colors = 5
 clf = KMeans(n_clusters = number_of_colors)
 labels = clf.fit_predict(modified_image)
 
@@ -56,9 +59,18 @@ def Pie_fig():
     fig1, ax1 = plt.subplots(1,1, figsize=(4,4))
     fig1.canvas.draw_idle()
     plt.title('Colors Detection Number = 10', fontsize=20)
-    ax1.pie(counts.values(), labels = hex_colors, colors = hex_colors,frame=False, radius=.8,labeldistance=1.08)
-    PieChart = mpld3.fig_to_html(fig1, template_type= "simple")
+    ax1.pie(counts.values(), labels = hex_colors, colors = hex_colors,frame=False, radius=.8,labeldistance=1.08,)
+    #plt.show()
+    PieChart = mpld3.fig_to_html(fig1, template_type= "simple")    
     return PieChart
+
+fig1, ax1 = plt.subplots(1,1, figsize=(4,4))
+fig1.canvas.draw_idle()
+plt.title('Colors Detection (Number = %s)' %number_of_colors, fontsize=20)
+ax1.pie(counts.values(), labels = hex_colors, colors = hex_colors,frame=False, radius=.8,labeldistance=1.08, autopct='%1.1f%%')
+plt.show()
+
+
 
 for i in range(len(rgb_colors)):
     rgb_colors[i] = rgb_colors[i].astype(int)

@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask as Fl, redirect, request, url_for, render_template, session
+from flask import Flask as Fl, redirect, request, url_for, render_template, session, flash
 from datetime import timedelta
 from Colors import *
 app = Fl(__name__)
@@ -36,9 +36,13 @@ def user():
     else:
         return redirect(url_for("login"))
 
-@app.route('/figure')
+@app.route('/figure', methods=["POST", "GET"])
 def figure():
-    return render_template("figure.html",pie = Pie_fig())
+    if request.method == "POST":
+        col_num = request.form["num_range"]
+        return col_num
+    else:
+        return render_template("figure.html",pie = Pie_fig())
 
 @app.route('/Pie')
 def Pie():
