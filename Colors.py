@@ -1,13 +1,11 @@
-from cProfile import label
-from re import L
 import pandas as pd
 import numpy as np 
 import matplotlib.pyplot as plt, mpld3
-import sklearn
 from sklearn.cluster import KMeans
 from collections import Counter
 from skimage.color import rgb2lab, deltaE_cie76
-import cv2 
+import cv2
+#from site import figure
 plt.style.use('ggplot')
 plt.rcParams['font.family'] = 'sans-serif' 
 plt.rcParams['font.serif'] = 'Ubuntu' 
@@ -37,22 +35,20 @@ def get_image(image_path):
 def RGB2HEX(color):
     return "#{:02x}{:02x}{:02x}".format(int(color[0]), int(color[1]), int(color[2]))
 
-img_name = "picture.jpeg" #input("Name of picture as well as its extension.\nPicture must be in the same folder as \"Colors.py\" file.\n")
+img_name = "control.png" #input("Name of picture as well as its extension.\nPicture must be in the same folder as \"Colors.py\" file.\n")
 #picture.jpeg
 image = get_image(img_name)
+number_of_colors = 5
 modified_image = image.reshape(image.shape[0]*image.shape[1], 3)
-number_of_colors = 10
-
-if number_of_colors < 5:
-    number_of_colors = 5
-clf = KMeans(n_clusters = number_of_colors)
-labels = clf.fit_predict(modified_image)
+clf = KMeans(n_clusters = number_of_colors) #.fit(modified_image)
+labels = clf.fit_predict(modified_image) #labels_ #
 
 counts = Counter(labels)
+#rev_vals = (counts.values)
 
 center_colors = clf.cluster_centers_
-ordered_colors = [center_colors[i] for i in counts.keys()]
-hex_colors = [RGB2HEX(ordered_colors[i]) for i in counts.keys()]
+ordered_colors = [center_colors[i] for i in counts.keys()]#smallest to biggest
+hex_colors = [RGB2HEX(ordered_colors[i]) for i in range(len(ordered_colors))] 
 rgb_colors = [ordered_colors[i] for i in counts.keys()]
 
 def Pie_fig():
@@ -60,14 +56,15 @@ def Pie_fig():
     fig1.canvas.draw_idle()
     plt.title('Colors Detection Number = 10', fontsize=20)
     ax1.pie(counts.values(), labels = hex_colors, colors = hex_colors,frame=False, radius=.8,labeldistance=1.08,)
-    #plt.show()
     PieChart = mpld3.fig_to_html(fig1, template_type= "simple")    
     return PieChart
+
+#Pie_fig()
 
 fig1, ax1 = plt.subplots(1,1, figsize=(4,4))
 fig1.canvas.draw_idle()
 plt.title('Colors Detection (Number = %s)' %number_of_colors, fontsize=20)
-ax1.pie(counts.values(), labels = hex_colors, colors = hex_colors,frame=False, radius=.8,labeldistance=1.08, autopct='%1.1f%%')
+ax1.pie(counts.values(), labels = hex_colors, colors = hex_colors,frame=False, radius=.8,labeldistance=1.08, autopct='%1.1f%%') #, autopct='%1.1f%%' for percents
 plt.show()
 
 
