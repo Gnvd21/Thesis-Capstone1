@@ -3,12 +3,14 @@
 
 {% block content %}
 <p>Pie Here</p>
-<form action="#", method="post">
-    <input type="file" accept="image/*" id="file_in"/>
-    <div class="slidecontainer">
-        <input type="range" min="1" max="100" value="50" class="slider" id="num_range" name = "num_range">
-    </div>
-</form>
 <a href="/Pie">Pie</a>
 <image width = "100">{{ pie|safe }}</image>
+<form action="#", method="post">
+    <input type="file" accept="image/*" id="file_in" name = "image"/>
+    <div class="slidecontainer">
+        <input type="range" min="1" max="10" value="50" class="slider" id="num_range" name = "num_range">
+    </div>
+</form>
+
+
 {% endblock %}
