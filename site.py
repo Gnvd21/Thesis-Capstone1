@@ -5,6 +5,7 @@ from Colors import *
 app = Fl(__name__)
 app.secret_key = "hello"
 app.permanent_session_lifetime = timedelta(minutes=60)
+num_range = 0
 
 @app.route("/")
 def home():
@@ -38,11 +39,10 @@ def user():
 
 @app.route('/figure', methods=["POST", "GET"])
 def figure():
-    if request.method == "POST":
-        col_num = request.form["num_range"]
-        return col_num
-    else:
-        return render_template("figure.html",pie = Pie_fig())
+    #if request.method == "POST":
+        #num_range = request.form["num_range"]        
+    #else:
+    return render_template("figure.html",pie = Pie_fig())
 
 @app.route('/Pie')
 def Pie():
